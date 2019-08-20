@@ -9,16 +9,31 @@ public class Pelicula {
 	private int duracion;
 	private String clasificacion;
 	private String genero;
-	private String imagen = "cinema.jpg";
+	private String imagen = "cinema.png";
 	private Date fechaEstreno;
 	private String estatus = "Activa";
 	
+	private Detalle detalle;
 	
 	
 	
-	public int getId() {
-		return id;
+	
+	
+	public Detalle getDetalle() {
+		return detalle;
 	}
+
+
+	public void setDetalle(Detalle detalle) {
+		this.detalle = detalle;
+	}
+
+
+	public int getId() {	
+		return id;	
+	}
+	
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -64,12 +79,18 @@ public class Pelicula {
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
 	}
+
+
 	@Override
 	public String toString() {
 		return "Pelicula [id=" + id + ", titulo=" + titulo + ", duracion=" + duracion + ", clasificacion="
 				+ clasificacion + ", genero=" + genero + ", imagen=" + imagen + ", fechaEstreno=" + fechaEstreno
-				+ ", estatus=" + estatus + "]";
+				+ ", estatus=" + estatus + ", detalle=" + detalle + "]";
 	}
+	
+	
+	
+	
 	
 	
 	

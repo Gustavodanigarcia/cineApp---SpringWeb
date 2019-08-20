@@ -1,6 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,9 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>CineSite | Bienvenido</title>
-
 	<spring:url value="/resources" var="urlPublic"></spring:url>
-		<spring:url value="/" var="urlRoot"></spring:url>
+	<spring:url value="/" var="urlRoot"></spring:url>
     <link href="${urlPublic}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${urlPublic}/bootstrap/css/theme.css" rel="stylesheet">
 
@@ -20,37 +18,71 @@
 
   <body>
 
-<jsp:include page="includes/menu.jsp"></jsp:include>
-
-
-
+    <jsp:include page="includes/menu.jsp"></jsp:include>
 
     <div class="container theme-showcase" role="main">
 
-      <!-- -------------------------------------------------CARUSEL DE IMAGENES  ================================================== -->
+      <!-- Carousel
+    ================================================== -->
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
+        
+        	 <c:forEach items="${banners}" var="banner" varStatus="loop">
+        		<c:choose>
+	       		<c:when test="${loop.index==0}">
+	       			<li data-target="#myCarousel" data-slide-to="${loop.index}" class="active"></li>
+	        		</c:when>
+	        		<c:otherwise>
+		         	<li data-target="#myCarousel" data-slide-to="${loop.index}"></li>
+		         </c:otherwise>
+	       	</c:choose>
+	       </c:forEach>
+        
+        	 <%-- Asi estaba de forma Estatica
           <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
           <li data-target="#myCarousel" data-slide-to="1"></li>
           <li data-target="#myCarousel" data-slide-to="2"></li>         
           <li data-target="#myCarousel" data-slide-to="3"></li>	
+           --%>
+          
         </ol>
+        
         <!-- Image Size 1140 x 250 -->
         <div class="carousel-inner" role="listbox">
-          <div class="item active">         
-            <img src="${urlPublic}/images/slide1.jpg" alt="Slide" title="Some text" >
-          </div>
-          <div class="item">         
-            <img src="${urlPublic}/images/slide2.jpg" alt="Slide" title="Some text" >
-          </div>
-          <div class="item">         
-            <img src="${urlPublic}/images/slide3.jpg" alt="Slide" title="Some text" >
-          </div>
-          <div class="item">         
-            <img src="${urlPublic}/images/slide4.jpg" alt="Slide" title="Some text" >
-          </div>
+        
+        	<c:forEach items="${banners}" var="banner" varStatus="loop">
+        		<c:choose>
+	        		<c:when test="${loop.index==0}">
+	        			<div class="item active">         
+		            	<img src="${urlPublic}/images/${banner.archivo}" alt="${banner.titulo}" title="${banner.titulo}" >
+		         	</div>
+	        		</c:when>        	
+		         <c:otherwise>
+		         	<div class="item">         
+		            	<img src="${urlPublic}/images/${banner.archivo}" alt="${banner.titulo}" title="${banner.titulo}" >
+		         	</div>
+		         </c:otherwise>
+	         </c:choose>
+        	</c:forEach>  
+        	      
+          <%-- Asi estaba de forma Estatica     
+	          <div class="item active">         
+	            <img src="${urlPublic}/images/slide1.jpg" alt="Slide" title="Some text" >
+	          </div>
+	          <div class="item">         
+	            <img src="${urlPublic}/images/slide2.jpg" alt="Slide" title="Some text" >
+	          </div>
+	          <div class="item">         
+	            <img src="${urlPublic}/images/slide3.jpg" alt="Slide" title="Some text" >
+	          </div>
+	          <div class="item">         
+	            <img src="${urlPublic}/images/slide4.jpg" alt="Slide" title="Some text" >
+	          </div>
+           --%>
+           
         </div>
+        
         <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
@@ -59,15 +91,8 @@
           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
         </a>
+        
       </div><!-- /.carousel -->
-
-     <!-- -------------------------------------------------/CARUSEL DE IMAGENES  ================================================== -->
-
-
-
-
-
-  <!---------------------------------------- BUSQUEDA DE FECHA ----------------------------------------------------------->
 
       <div class="row page-header">          
         <div class="col-lg-12">         
@@ -75,62 +100,44 @@
           <form class="form-inline" action="${urlRoot}search" method="post">
             <div class="form-group">
               <label for="fecha">Fecha: </label>
-              
               <select id="fecha" name="fecha" class="form-control">
-              <c:forEach items="${fechas }" var="fecha"> 
-                <option value="${fecha }">${fecha }</option>
-             </c:forEach>  
+               <c:forEach items="${fechas}" var="fecha">
+                  <c:choose>
+							<c:when test="${fechaBusqueda eq fecha}" >
+							     <option value="${fecha}" selected>${fecha}</option>	
+							</c:when>
+							<c:otherwise>
+							     <option value="${fecha}">${fecha}</option>	
+							</c:otherwise>
+				  		</c:choose>	
+               </c:forEach>             
               </select>
-              
-              
             </div>            
             <button type="submit" class="btn btn-primary">Filtrar</button>
           </form>
         </div>
       </div>
 
-  <!---------------------------------------- /BUSQUEDA DE FECHA ----------------------------------------------------------->
-
-
-
-
-	
-        <!---------------------------------------- PELICULAS MOSTRAR ----------------------------------------------------------->
-  
-    
+      <!-- Marketing messaging -->
       <div class="container marketing">
 
         <div class="row">
-  		<c:forEach items="${peliculas }" var="pelicula">
-  		
+
+		<c:forEach items="${peliculas }" var="pelicula">
           <div class="col-xs-12 col-sm-6 col-md-3">
             <img class="img-rounded" src="${urlPublic}/images/${pelicula.imagen}" alt="Generic placeholder image" width="150" height="200">
-            <h4>${pelicula.titulo}</h4>
-            
-            <h5>
-              <span class="label label-danger"> ${ pelicula.clasificacion } #</span>
-              
-              <span class="label label-success"> ${ pelicula.duracion } min.</span>          
-            
-              <span class="label label-warning"> ${ pelicula.genero } </span>
-            </h5>   
-		<%--      
-            <p><a class="btn btn-sm btn-primary" href="detail/${pelicula.id }/${fechaBusqueda}" role="button">Consulta Horarios &raquo;</a></p>
-          --%> 
-           <p><a class="btn btn-sm btn-primary" href="detail?idMovie=${pelicula.id }&fecha=${fechaBusqueda}" role="button">Consulta Horarios &raquo;</a></p>
+            <h4>${pelicula.titulo }</h4>
+            <h4>
+              <span class="label label-default">${pelicula.clasificacion }</span>
+              <span class="label label-default">${pelicula.duracion } min</span>
+              <span class="label label-default">${pelicula.genero }</span>
+            </h4>         
+            <p><a class="btn btn-sm btn-primary" href="${urlRoot}detail/${pelicula.id }/${fechaBusqueda}" role="button">Consulta Horarios &raquo;</a></p>             
           </div>
+	    </c:forEach>
+          
 
-  </c:forEach>
-     </div>
-    
-    
-          <!---------------------------------------- /PELICULAS MOSTRAR ----------------------------------------------------------->
-
-
-
-
-
-         <!---------------------------------------- NOTIFICIAS INFORMACION ----------------------------------------------------------->
+        </div>
 
         <div class="page-header">
           <h2 class="text text-center"><span class="label label-success">Noticias y novedades</span></h2>
@@ -163,14 +170,10 @@
 
           </div>
         </div>
-	
+
       </div>
 
-			  <!---------------------------------------- /NOTIFICIAS INFORMACION ----------------------------------------------------------->
-
-
-<jsp:include page="includes/footer.jsp"></jsp:include>
-
+      <jsp:include page="includes/footer.jsp"></jsp:include>
 
     </div> <!-- /container -->
 
